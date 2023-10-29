@@ -29,6 +29,9 @@ Although not part of WGSL, JavaScript template literals (`${...}`) are detected 
 ## Limitations
 
 * Only ASCII shader code is supported. (WGSL is as per default UTF-8.)
+* Unreachable (dead) code will not be removed. Unnecessary tokens (e.g. `((1.0 + ((2.0 * val))))`) won't be removed either.
 * Identifiers named like swizzle names (xyzw/rgba, including any combination of these) are not replaced currently. I.e. if there is a `struct` with a member named `xxz`, this member won't be mangled. This might be improved sometime soon.
+* Floating point numbers are currently not detected (matched) via regex, thus detection will fail in certain scenarios. A clear separation of numbers and operators by spaces (e.g. `1.0-ef` vs. `1.0 - ef`) avoids possible errors for now. This one is a strong candidate for improvement once time is available.
+* Identifier mangling currently does not consider scope. This should be improved to yield better (smaller) mangling results. This is high on the list of improvements as well.
 * Other reductions are certainly possible, e.g. converting `vec3<f32>(1.0, 1.0, 1.0)` to `vec3f(1)`.
-* Likely there are other shortcomings and/or bugs. Testing was done only on a limited amout of shaders. Let me know if you find an issue!
+* Likely there are other shortcomings and/or bugs. Testing was done only on a limited amout of shaders. Please let me know if you find an issue!
