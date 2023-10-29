@@ -24,6 +24,7 @@ $ cat fragment.wgsl | wgslminify --no-mangle >fragment_out.wgsl
 
 Minification removes all kinds of comments, leading and trailing zeros of non-hexadecimal numeric literals (float and integer) and any unnecessary whitespaces.
 Mangling replaces all identifiers with short character sequences. Identifiers with most occurrences will receive the shortest sequences.
+Although not part of WGSL, JavaScript template literals (`${...}`) are detected and ignored during minification.
 
 ## Limitations
 
