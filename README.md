@@ -1,6 +1,6 @@
 # wgslminify
 
-Utility to minify and mangle [WGSL](https://www.w3.org/TR/WGSL/), [WebGPU](https://www.w3.org/TR/webgpu/) shader code. When applying wgslminify, the shader code is tokenized and then several minification and mangling operations are applied. Output should be functionally equivalent to the original shader but smaller in text size.
+Utility to minify and mangle [WGSL](https://www.w3.org/TR/WGSL/), [WebGPU](https://www.w3.org/TR/webgpu/) shader code. When running wgslminify, your shader code is tokenized and then several minification and mangling operations are applied. Output should be functionally equivalent to the original shader but smaller in text size.
 
 ## Usage
 
