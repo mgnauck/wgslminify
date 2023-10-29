@@ -35,3 +35,7 @@ Although not part of WGSL, JavaScript template literals (`${...}`) are detected 
 * Identifier mangling currently does not consider scope. This should be improved to yield better (smaller) mangling results. This is high on the list of improvements as well.
 * Other reductions are certainly possible, e.g. converting `vec3<f32>(1.0, 1.0, 1.0)` to `vec3f(1)`.
 * Likely there are other shortcomings and/or bugs. Testing was done only on a limited amout of shaders. Please let me know if you find an issue!
+
+## Build
+
+Use the included makefile to build the project.
