@@ -1,3 +1,10 @@
+/*
+Minifcation and identifier mangling for WGSL (WebGPU shading language).
+Licensed unter the MIT License. https://mit-license.org
+
+Author: Markus Gnauck
+*/
+
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>

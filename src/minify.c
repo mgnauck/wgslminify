@@ -211,8 +211,8 @@ bool is_swizzle_comp(const char *name, size_t name_len, const char *values)
         valid = true;
         break;
       }
-      if(!valid)
-        return false;
+    if(!valid)
+      return false;
   }
   return true;
 }
