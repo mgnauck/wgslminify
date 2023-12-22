@@ -1,21 +1,17 @@
 CC=cc
-CFLAGS=-W -Wall -Wextra -pedantic -std=c2x
+CCFLAGS=-W -Wall -Wextra -pedantic -std=c99
 LDFLAGS=-g
-LDLIBS=
 SRC=main.c tokenize.c minify.c buffer.c keywords.c
 OBJ=$(patsubst %.c,obj/%.o,$(SRC))
 
-.PHONY: wgslminify
+.PHONY: clean
 
-all: wgslminify
+wgslminify: $(OBJ)
+	$(CC) $^ $(LDFLAGS) -o $@
 
 obj/%.o: src/%.c
 	@mkdir -p `dirname $@`
-	$(CC) $(CFLAGS) -c $< -o $@
-
-wgslminify: $(OBJ)
-	$(CC) $^ $(CFLAGS) -o $@ $(LDFLAGS)
+	$(CC) $(CCFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) wgslminify
-	rmdir obj
+	rm -rf obj wgslminify
