@@ -14,4 +14,6 @@ bool write_buf_inc(buffer *buf, char value, size_t buf_inc);
 bool write_buf(buffer* buf, char value);
 char *buf_to_str(buffer *buf, bool free_buf);
 
+char *strdup(const char *src);
+
 #endif

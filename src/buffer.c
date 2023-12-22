@@ -50,3 +50,13 @@ char *buf_to_str(buffer *buf, bool free_buf)
   
   return str;
 }
+
+char *strdup(const char *src)
+{
+  size_t len = strlen(src) + 1;
+  char *dst = malloc(len);
+  if(dst == NULL)
+    return NULL;
+  memcpy (dst, src, len);
+  return dst;
+}
