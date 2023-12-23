@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "buffer.h"
+#include "keywords.h"
 
 typedef struct identifier {
   char *value;
@@ -227,7 +228,7 @@ bool is_swizzle_name(const char *name)
   return false;
 }
 
-bool is_excluded(const char *name, char **exclude_names, size_t exclude_count)
+bool is_excluded(const char *name, const char **exclude_names, size_t exclude_count)
 {
   for(size_t i=0; i<exclude_count; i++)
     if(strcmp(name, exclude_names[i]) == 0)
@@ -235,7 +236,8 @@ bool is_excluded(const char *name, char **exclude_names, size_t exclude_count)
   return false;
 }
 
-bool create_identifier_list(identifier **first, token_node *head, char **exclude_names, size_t exclude_count)
+bool create_identifier_list(identifier **first, token_node *head,
+    const char **exclude_names, size_t exclude_count)
 {
   token_node *curr = head;
   while(curr) {
@@ -270,7 +272,7 @@ char *eval_name(size_t cnt)
   return buf_to_str(&buf, true);
 }
 
-bool reassign_identifier_names(identifier *first, char **exclude_names,
+bool reassign_identifier_names(identifier *first, const char **exclude_names,
     size_t exclude_count)
 {
   size_t count = 1;
@@ -279,7 +281,8 @@ bool reassign_identifier_names(identifier *first, char **exclude_names,
     if(!subst)
       return true;
     if(!is_swizzle_name(subst) &&
-        !is_excluded(subst, exclude_names, exclude_count)) {
+        !is_excluded(subst, exclude_names, exclude_count) &&
+        !is_excluded(subst, keywords, keywords_count)) {
       free(first->value);
       first->value = subst;
       first = first->next;
@@ -338,7 +341,7 @@ void free_identifiers(identifier *first)
   }
 }
 
-bool mangle(token_node **head, char **exclude_names, size_t exclude_count)
+bool mangle(token_node **head, const char **exclude_names, size_t exclude_count)
 {
   identifier *first = NULL;
   bool error =

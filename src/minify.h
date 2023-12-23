@@ -4,6 +4,6 @@
 #include "tokenize.h"
 
 bool minify(token_node **head);
-bool mangle(token_node **head, char **exclude_names, size_t exclude_count);
+bool mangle(token_node **head, const char **exclude_names, size_t exclude_count);
 
 #endif
