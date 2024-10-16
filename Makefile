@@ -1,5 +1,4 @@
-CC=cc
-CCFLAGS=-W -Wall -Wextra -pedantic -std=c99
+CCFLAGS=-Wall -Wextra -pedantic -std=c11
 LDFLAGS=-g
 SRC=main.c tokenize.c minify.c buffer.c keywords.c
 OBJ=$(patsubst %.c,obj/%.o,$(SRC))

@@ -1,13 +1,12 @@
 #include "minify.h"
-
 #include <ctype.h>
 #include <errno.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "buffer.h"
 #include "keywords.h"
+#include "tokenize.h"
 
 typedef struct identifier {
   char *value;
@@ -165,7 +164,7 @@ identifier *add_identifier(identifier **first, const char *value)
   }
 
   if(!curr) {
-    curr = malloc(sizeof *curr);
+    curr = malloc(sizeof(*curr));
     if(!curr) {
       fprintf(stderr, "Allocation failed: %s\n", strerror(errno));
       return NULL;
@@ -318,10 +317,19 @@ bool update_identifier_nodes(token_node* head)
   return false;
 }
 
-void print_identifier(identifier *first)
+void print_identifiers(identifier *first)
 {
   while(first) {
     printf("%s (%zu)\n", first->value, first->count);
+    first = first->next;
+  }
+}
+
+void print_unique_identifiers(identifier *first)
+{
+  while(first) {
+    if(first->count == 1)
+      printf("Potentially unused identifier '%s'.\n", first->value);
     first = first->next;
   }
 }
@@ -341,17 +349,22 @@ void free_identifiers(identifier *first)
   }
 }
 
-bool mangle(token_node **head, const char **exclude_names, size_t exclude_count)
+bool mangle(token_node **head, const char **exclude_names, size_t exclude_count, bool print_unused)
 {
   identifier *first = NULL;
   bool error =
     create_identifier_list(&first, *head, exclude_names, exclude_count);
-  
-  if(!error)
-    error = reassign_identifier_names(first, exclude_names, exclude_count);
 
-  if(!error)
-    error = update_identifier_nodes(*head);
+  if(!error && print_unused)
+    print_unique_identifiers(first);
+ 
+  if(!print_unused) {
+    if(!error)
+      error = reassign_identifier_names(first, exclude_names, exclude_count);
+
+    if(!error)
+      error = update_identifier_nodes(*head);
+  }
   
   free_identifiers(first);
 

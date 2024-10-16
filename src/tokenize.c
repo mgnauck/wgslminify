@@ -1,10 +1,9 @@
 #include "tokenize.h"
-
 #include <ctype.h>
 #include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "buffer.h"
 #include "keywords.h"
 
@@ -170,7 +169,7 @@ bool read_block_comment(FILE *file, char **comment)
 
 token_node *create_token_node(token_node *last, enum token_type type, void *token)
 {
-  token_node *tn = malloc(sizeof *tn);
+  token_node *tn = malloc(sizeof(*tn));
   if(!tn) {
     fprintf(stderr, "Allocation failed: %s\n", strerror(errno));
     return NULL;
@@ -189,7 +188,7 @@ token_node *create_token_node(token_node *last, enum token_type type, void *toke
 
 token *create_token(const char *value)
 {
-  token *t = malloc(sizeof *t);
+  token *t = malloc(sizeof(*t));
   if(!t) {
     fprintf(stderr, "Allocation failed: %s\n", strerror(errno));
     return NULL;
@@ -207,7 +206,7 @@ token *create_token(const char *value)
 
 identifier_token *create_identifier_token(const char *value)
 {
-  identifier_token *t = malloc(sizeof *t);
+  identifier_token *t = malloc(sizeof(*t));
   if(!t) {
     fprintf(stderr, "Allocation failed: %s\n", strerror(errno));
     return NULL;

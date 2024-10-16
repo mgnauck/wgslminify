@@ -1,14 +1,12 @@
-/*
-Minifcation and identifier mangling for WGSL (WebGPU shading language).
-Licensed unter the MIT License. https://mit-license.org
-
-Author: Markus Gnauck
-*/
+// Minifcation and identifier mangling for WGSL (WebGPU shading language).
+// Licensed unter the MIT License. https://mit-license.org
+//
+// Author: Markus Gnauck
 
 #include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "buffer.h"
 #include "tokenize.h"
 #include "minify.h"
@@ -17,6 +15,7 @@ typedef struct arguments {
   char *filename;
   char *excludes;
   bool no_mangle;
+  bool print_unused;
   bool help;
 } arguments;
 
@@ -31,16 +30,31 @@ bool handle_arguments(int argc, char *argv[], arguments *args)
     }
 
     if(strcmp(argv[i], "--no-mangle") == 0) {
-      if(!args->excludes) {
+      if(!args->excludes && !args->print_unused) {
         args->no_mangle = true;
         continue;
-      } else {
+      } else if(args->excludes) {
         printf("%s: specify excluded identifiers or --no-mangle\n", argv[0]);
+        error = true;
+        break;
+      } else if(args->print_unused) {
+        printf("%s: specify --print-unused or --no-mangle\n", argv[0]);
         error = true;
         break;
       }
     }
 
+    if(strcmp(argv[i], "--print-unused") == 0) {
+      if(!args->no_mangle) {
+        args->print_unused = true;
+        continue;
+      } else {
+        printf("%s: specify --no-mangle or --print-unused\n", argv[0]);
+        error = true;
+        break;
+      }
+    }
+ 
     if(strcmp(argv[i], "-e") == 0) {
       if(args->no_mangle) {
         printf("%s: specify --no-mangle or excluded identifiers\n", argv[0]);
@@ -95,7 +109,7 @@ bool handle_arguments(int argc, char *argv[], arguments *args)
   }
 
   if(args->help || error)
-    printf("usage: wgslminify [--no-mangle | -e exclude1,exclude2,...] [file]\n");
+    printf("usage: wgslminify [--no-mangle | --print-unused | -e exclude1,exclude2,...] [file]\n");
 
   return error;
 }
@@ -149,7 +163,7 @@ bool parse_excludes(const char *exclude_string, char **exclude_names, size_t *ex
 
 int main(int argc, char *argv[])
 {
-  arguments args = { NULL, NULL, false, false };
+  arguments args = { NULL, NULL, false, false, false };
   if(handle_arguments(argc, argv, &args))
     return EXIT_FAILURE;
 
@@ -171,7 +185,7 @@ int main(int argc, char *argv[])
   size_t exclude_count = 0;
   if(args.excludes) {
     exclude_count = get_excludes_count(args.excludes);
-    exclude_names = malloc(exclude_count * sizeof *exclude_names);
+    exclude_names = malloc(exclude_count * sizeof(*exclude_names));
     if(exclude_names) {
       error = parse_excludes(args.excludes, exclude_names, &exclude_count);
       if(error)
@@ -186,8 +200,8 @@ int main(int argc, char *argv[])
     if(!error && head) {
       error = minify(&head);
       if(!error && !args.no_mangle)
-        error = mangle(&head, exclude_names, exclude_count); 
-      if(!error)
+        error = mangle(&head, (const char **)exclude_names, exclude_count, args.print_unused); 
+      if(!error && !args.print_unused)
         print_tokens_as_text(head);
       free_token_nodes(head);
       free_excludes(exclude_names, exclude_count);

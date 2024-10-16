@@ -1,5 +1,5 @@
-#ifndef WGSLMINIFY_KEYWORDS_H
-#define WGSLMINIFY_KEYWORDS_H
+#ifndef KEYWORDS_H
+#define KEYWORDS_H
 
 #include <stddef.h>
 

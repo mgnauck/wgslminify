@@ -55,7 +55,7 @@ const char *symbols[] = {
 "<",
 };
 
-const size_t symbols_count = sizeof symbols / sizeof symbols[0];
+const size_t symbols_count = sizeof(symbols) / sizeof(symbols[0]);
 const size_t max_symbol_len = 3;
 
 const char *keywords[] = {
@@ -511,4 +511,4 @@ const char *keywords[] = {
 "workgroupUniformLoad",
 };
 
-const size_t keywords_count = sizeof keywords / sizeof keywords[0];
+const size_t keywords_count = sizeof(keywords) / sizeof(keywords[0]);

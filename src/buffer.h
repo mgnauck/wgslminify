@@ -1,5 +1,5 @@
-#ifndef WGSLMINIFY_BUFFER_H
-#define WGSLMINIFY_BUFFER_H
+#ifndef BUFFER_H
+#define BUFFER_H
 
 #include <stdbool.h>
 #include <stddef.h>

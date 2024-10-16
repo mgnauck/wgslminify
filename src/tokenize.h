@@ -1,11 +1,11 @@
-#ifndef WGSLMINIFY_TOKENIZE_H
-#define WGSLMINIFY_TOKENIZE_H
+#ifndef TOKENIZE_H
+#define TOKENIZE_H
 
 #include <stdbool.h>
-#include <stdio.h>
 #include <stddef.h>
+#include <stdio.h>
 
-enum token_type {
+typedef enum token_type {
   COMMENT,
   KEYWORD,
   IDENTIFIER,
@@ -13,11 +13,11 @@ enum token_type {
   SYMBOL,
   WHITESPACE,
   SUBSTITUTION, // Non-WGSL ${expr} javascript template literal
-};
+} token_type;
 
 typedef struct token_node {
   void *token;
-  enum token_type type;
+  token_type type;
   struct token_node *prev;
   struct token_node *next;
 } token_node;
